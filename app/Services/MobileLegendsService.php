@@ -5,7 +5,7 @@ namespace App\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-class RocketLeagueService
+class MobileLegendsService
 {
     protected $client;
     protected $apiKey;
@@ -20,7 +20,7 @@ class RocketLeagueService
     public function getAllTeams()
     {
         try {
-            $response = $this->client->request('GET', 'https://rocket-league1.p.rapidapi.com/tournaments/asia-east', [
+            $response = $this->client->request('GET', 'https://id-game-checker.p.rapidapi.com/mobile-legends/1393323764/15748', [
                 'headers' => [
                     'x-rapidapi-key' => $this->apiKey
                 ],

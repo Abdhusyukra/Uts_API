@@ -4,87 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rocket League Tournaments</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/5.15.4/css/all.min.css">
+    <title>Mobile Legends User Info</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(120deg, #1e3c72, #2a5298);
+            color: #333;
         }
 
         .container {
-            width: 80%;
+            max-width: 700px;
             margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            padding: 30px 40px;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: #1e3c72;
+            margin-bottom: 30px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .field {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        .label {
+            font-weight: 600;
+            color: #555;
         }
 
-        th {
-            background-color: #f4f4f4;
-            color: #333;
+        .value {
+            color: #222;
         }
 
-        tr:hover {
-            background-color: #f9f9f9;
+        .status-ok {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-failed {
+            color: #dc3545;
+            font-weight: bold;
         }
 
         .error {
-            color: red;
-            font-size: 1.2rem;
             text-align: center;
+            font-size: 1.2rem;
+            color: #dc3545;
+        }
+
+        .status-icon {
+            margin-right: 6px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Rocket League Tournaments - Asia East</h1>
+        <h1>Mobile Legends User Info</h1>
 
-        @if (isset($data['error']))
-            <div class="error">
-                <p>Error: {{ $data['error'] }}</p>
+        @if (isset($response['error']) && $response['error'] === false)
+            <div class="field">
+                <span class="label">Status:</span>
+                <span class="value status-ok status-row">
+                    <span class="status-icon">✔</span> 200 OK - {{ $response['msg'] }}
+                </span>
             </div>
         @else
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Mode</th>
-                        <th>Players</th>
-                        <th>Start Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($data['tournaments'] as $tournament)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $tournament['mode'] }}</td>
-                            <td>{{ $tournament['players'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($tournament['starts'])->format('d M Y H:i') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="field">
+                <span class="label">Status:</span>
+                <span class="value status-failed status-row">
+                    <span class="status-icon">✘</span> Error - {{ $response['msg'] ?? 'Unknown error' }}
+                </span>
+            </div>
+        @endif
+
+        @if (isset($response['data']))
+            <div class="field">
+                <span class="label">Username:</span>
+                <span class="value">{{ $response['data']['username'] }}</span>
+            </div>
+            <div class="field">
+                <span class="label">ID:</span>
+                <span class="value">{{ $response['data']['id'] }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Server:</span>
+                <span class="value">{{ $response['data']['server'] }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Region:</span>
+                <span class="value">{{ $response['data']['region'] }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Made In:</span>
+                <span class="value">{{ $response['data']['made_in'] ?: '-' }}</span>
+            </div>
         @endif
     </div>
 </body>
